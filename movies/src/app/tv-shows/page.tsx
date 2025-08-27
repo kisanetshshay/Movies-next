@@ -4,6 +4,7 @@ import { MovieSection } from '@/components/ui/movie-section'
 import { MovieHeader } from '@/components/ui/movie-header'
 import { useLatestTVShows, useFavorites } from '@/hooks/useFetchMovies'
 import { useRouter } from 'next/navigation'
+import { MediaItem } from '@/types' 
 
 export default function TVShowsPage() {
   const router = useRouter()
@@ -14,8 +15,9 @@ export default function TVShowsPage() {
     router.push(`/search?q=${encodeURIComponent(query)}`)
   }
 
-  const handlePlay = (item: any) => {
-    console.log('Playing:', 'title' in item ? item.title : item.name)
+  const handlePlay = (item: MediaItem) => {
+    const title = 'title' in item ? item.title : item.name
+    console.log('Playing:', title || 'Unknown Title')
   }
 
   const handleFavoritesClick = () => {
@@ -23,7 +25,7 @@ export default function TVShowsPage() {
   }
 
   const handleAuthClick = () => {
-    // This will be handled in the MovieHeader component
+    
   }
 
   return (

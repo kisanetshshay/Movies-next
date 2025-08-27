@@ -1,48 +1,59 @@
-import { useState } from 'react';
-import { Heart, Play, Star } from 'lucide-react';
-import { Movie, TVShow, getImageUrl } from '@/utils/fetchMovies';
-import { Button } from './button';
-import { Card, CardContent } from './card';
-import { Badge } from './badge';
+'use client'
+
+import { useState } from 'react'
+import { Heart, Play, Star } from 'lucide-react'
+import { Movie, TVShow, getImageUrl } from '@/utils/fetchMovies'
+import { Button } from './button'
+import { Card, CardContent } from './card'
+import { Badge } from './badge'
+import Image from 'next/image' 
 
 interface MovieCardProps {
-  item: Movie | TVShow;
-  onFavoriteToggle?: (item: Movie | TVShow) => void;
-  isFavorite?: boolean;
-  onPlay?: (item: Movie | TVShow) => void;
+  item: Movie | TVShow
+  onFavoriteToggle?: (item: Movie | TVShow) => void
+  isFavorite?: boolean
+  onPlay?: (item: Movie | TVShow) => void
 }
 
 export function MovieCard({ item, onFavoriteToggle, isFavorite = false, onPlay }: MovieCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
-  const title = 'title' in item ? item.title : item.name;
-  const date = 'release_date' in item ? item.release_date : item.first_air_date;
-  const year = date ? new Date(date).getFullYear() : '';
+  const title = 'title' in item ? item.title : item.name
+  const date = 'release_date' in item ? item.release_date : item.first_air_date
+  const year = date ? new Date(date).getFullYear() : ''
 
-  const handleImageLoad = () => setImageLoaded(true);
-  const handleImageError = () => setImageError(true);
+  const handleImageLoad = () => setImageLoaded(true)
+  const handleImageError = () => setImageError(true)
+
+  const posterUrl = item.poster_path ? getImageUrl(item.poster_path) : '/images/placeholder.jpg'
 
   return (
     <Card className="movie-card-hover bg-movie-light/10 border-gray-700/50 overflow-hidden group relative">
       <div className="relative aspect-[2/3] overflow-hidden">
+        {}
         {!imageError ? (
-          <img
-            src={getImageUrl(item.poster_path)}
+          <Image
+            src={posterUrl}
             alt={title}
-            className={`w-full h-full object-cover transition-opacity duration-300 ${
+            fill
+            className={`object-cover transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
-            onLoad={handleImageLoad}
+            onLoadingComplete={handleImageLoad}
             onError={handleImageError}
+            unoptimized 
             loading="lazy"
+            blurDataURL={item.poster_path ? undefined : '/images/placeholder.jpg'}
+            placeholder={item.poster_path ? 'empty' : 'blur'} 
           />
         ) : (
           <div className="w-full h-full bg-gray-800 flex items-center justify-center">
             <span className="text-gray-400 text-sm text-center px-4">No Image Available</span>
           </div>
         )}
-        
+
+        {/* Loading skeleton */}
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 bg-gray-800 animate-pulse" />
         )}
@@ -78,6 +89,7 @@ export function MovieCard({ item, onFavoriteToggle, isFavorite = false, onPlay }
         )}
       </div>
 
+      {}
       <CardContent className="p-4">
         <h3 className="font-semibold text-white text-sm mb-2 line-clamp-2 leading-tight">
           {title}
@@ -92,5 +104,5 @@ export function MovieCard({ item, onFavoriteToggle, isFavorite = false, onPlay }
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

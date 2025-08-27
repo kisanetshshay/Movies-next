@@ -4,6 +4,7 @@ import { MovieSection } from '@/components/ui/movie-section'
 import { MovieHeader } from '@/components/ui/movie-header'
 import { useFavorites } from '@/hooks/useFetchMovies'
 import { useRouter } from 'next/navigation'
+import { MediaItem } from '@/types' 
 
 export default function FavoritesPage() {
   const router = useRouter()
@@ -13,8 +14,9 @@ export default function FavoritesPage() {
     router.push(`/search?q=${encodeURIComponent(query)}`)
   }
 
-  const handlePlay = (item: any) => {
-    console.log('Playing:', 'title' in item ? item.title : item.name)
+  const handlePlay = (item: MediaItem) => {
+    const title = 'title' in item ? item.title : item.name
+    console.log('Playing:', title)
   }
 
   const handleFavoritesClick = () => {

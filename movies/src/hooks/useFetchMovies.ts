@@ -1,27 +1,44 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import {
   fetchLatestMovies,
   fetchLatestTVShows,
   fetchPopularMovies,
-  fetchPopularTVShows,
   fetchTrendingMovies,
-  fetchTrendingTVShows,
   searchMovies,
   searchTVShows,
   fetchMovieDetails,
-  fetchTVShowDetails,
   Movie,
   TVShow,
   TMDBResponse,
 } from '../utils/fetchMovies'
+
+
+
+export interface MovieDetails extends Movie {
+  belongs_to_collection: { id: number; name: string; poster_path: string | null } | null
+  budget: number
+  genres: { id: number; name: string }[]
+  homepage: string
+  imdb_id: string
+  production_companies: { id: number; logo_path: string | null; name: string; origin_country: string }[]
+  production_countries: { iso_3166_1: string; name: string }[]
+  revenue: number
+  runtime: number
+  spoken_languages: { english_name: string; iso_639_1: string; name: string }[]
+  status: string
+  tagline: string
+}
+
 
 interface UseMoviesState<T> {
   data: T | null
   loading: boolean
   error: string | null
 }
+
 
 export const useLatestMovies = (page = 1) => {
   const [state, setState] = useState<UseMoviesState<TMDBResponse<Movie>>>({
@@ -37,10 +54,13 @@ export const useLatestMovies = (page = 1) => {
         const data = await fetchLatestMovies(page)
         setState({ data, loading: false, error: null })
       } catch (error) {
-        setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to fetch movies' })
+        setState({
+          data: null,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch latest movies',
+        })
       }
     }
-
     loadMovies()
   }, [page])
 
@@ -61,10 +81,13 @@ export const useLatestTVShows = (page = 1) => {
         const data = await fetchLatestTVShows(page)
         setState({ data, loading: false, error: null })
       } catch (error) {
-        setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to fetch TV shows' })
+        setState({
+          data: null,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch latest TV shows',
+        })
       }
     }
-
     loadTVShows()
   }, [page])
 
@@ -85,10 +108,13 @@ export const usePopularMovies = (page = 1) => {
         const data = await fetchPopularMovies(page)
         setState({ data, loading: false, error: null })
       } catch (error) {
-        setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to fetch popular movies' })
+        setState({
+          data: null,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch popular movies',
+        })
       }
     }
-
     loadMovies()
   }, [page])
 
@@ -109,10 +135,13 @@ export const useTrendingMovies = (timeWindow: 'day' | 'week' = 'week') => {
         const data = await fetchTrendingMovies(timeWindow)
         setState({ data, loading: false, error: null })
       } catch (error) {
-        setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to fetch trending movies' })
+        setState({
+          data: null,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch trending movies',
+        })
       }
     }
-
     loadMovies()
   }, [timeWindow])
 
@@ -131,13 +160,16 @@ export const useSearchMovies = () => {
       setState({ data: null, loading: false, error: null })
       return
     }
-
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       const data = await searchMovies(query, page)
       setState({ data, loading: false, error: null })
     } catch (error) {
-      setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to search movies' })
+      setState({
+        data: null,
+        loading: false,
+        error: error instanceof Error ? error.message : 'Failed to search movies',
+      })
     }
   }
 
@@ -156,13 +188,16 @@ export const useSearchTVShows = () => {
       setState({ data: null, loading: false, error: null })
       return
     }
-
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       const data = await searchTVShows(query, page)
       setState({ data, loading: false, error: null })
     } catch (error) {
-      setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to search TV shows' })
+      setState({
+        data: null,
+        loading: false,
+        error: error instanceof Error ? error.message : 'Failed to search TV shows',
+      })
     }
   }
 
@@ -170,7 +205,7 @@ export const useSearchTVShows = () => {
 }
 
 export const useMovieDetails = (movieId: number | null) => {
-  const [state, setState] = useState<UseMoviesState<any>>({
+  const [state, setState] = useState<UseMoviesState<MovieDetails>>({
     data: null,
     loading: false,
     error: null,
@@ -188,7 +223,11 @@ export const useMovieDetails = (movieId: number | null) => {
         const data = await fetchMovieDetails(movieId)
         setState({ data, loading: false, error: null })
       } catch (error) {
-        setState({ data: null, loading: false, error: error instanceof Error ? error.message : 'Failed to fetch movie details' })
+        setState({
+          data: null,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch movie details',
+        })
       }
     }
 
@@ -198,14 +237,15 @@ export const useMovieDetails = (movieId: number | null) => {
   return state
 }
 
+
 export const useFavorites = () => {
   const [favorites, setFavorites] = useState<(Movie | TVShow)[]>([])
 
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('moovie-favorites')
-    if (savedFavorites) {
+    const saved = localStorage.getItem('moovie-favorites')
+    if (saved) {
       try {
-        setFavorites(JSON.parse(savedFavorites))
+        setFavorites(JSON.parse(saved))
       } catch (error) {
         console.error('Failed to parse favorites from localStorage:', error)
       }

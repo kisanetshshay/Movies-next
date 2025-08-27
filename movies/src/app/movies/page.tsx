@@ -4,18 +4,20 @@ import { MovieSection } from '@/components/ui/movie-section'
 import { MovieHeader } from '@/components/ui/movie-header'
 import { usePopularMovies, useFavorites } from '@/hooks/useFetchMovies'
 import { useRouter } from 'next/navigation'
+import { MediaItem } from '@/types' 
 
 export default function MoviesPage() {
   const router = useRouter()
-  const { data: popularMoviesData, loading: popularMoviesLoading, error: popularMoviesError } = usePopularMovies()
+  const { data: popularMoviesData, loading, error } = usePopularMovies()
   const { toggleFavorite, isFavorite } = useFavorites()
 
   const handleSearch = (query: string) => {
     router.push(`/search?q=${encodeURIComponent(query)}`)
   }
 
-  const handlePlay = (item: any) => {
-    console.log('Playing:', 'title' in item ? item.title : item.name)
+  const handlePlay = (item: MediaItem) => {
+    const title = 'title' in item ? item.title : item.name
+    console.log('Playing:', title || 'Unknown Title')
   }
 
   const handleFavoritesClick = () => {
@@ -41,8 +43,8 @@ export default function MoviesPage() {
           <MovieSection
             title="Popular Movies"
             items={popularMoviesData?.results || []}
-            loading={popularMoviesLoading}
-            error={popularMoviesError}
+            loading={loading}
+            error={error}
             onFavoriteToggle={toggleFavorite}
             isFavorite={isFavorite}
             onPlay={handlePlay}

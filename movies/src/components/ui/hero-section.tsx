@@ -1,22 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Play, Plus, Info, Star } from 'lucide-react';
-import { Button } from './button';
-import { Badge } from './badge';
-import { Movie, TVShow, getBackdropUrl } from '@/utils/fetchMovies';
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Play, Plus, Info, Star } from 'lucide-react'
+import { Button } from './button'
+import { Badge } from './badge'
+import { Movie, TVShow, getBackdropUrl } from '@/utils/fetchMovies'
+import Image from 'next/image' 
 
 interface HeroSectionProps {
-  featuredItem?: Movie | TVShow | null;
-  onPlay?: (item: Movie | TVShow) => void;
-  onAddToList?: (item: Movie | TVShow) => void;
-  onMoreInfo?: (item: Movie | TVShow) => void;
+  featuredItem?: Movie | TVShow | null
+  onPlay?: (item: Movie | TVShow) => void
+  onAddToList?: (item: Movie | TVShow) => void
+  onMoreInfo?: (item: Movie | TVShow) => void
 }
 
 export function HeroSection({ featuredItem, onPlay, onAddToList, onMoreInfo }: HeroSectionProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
-    setImageLoaded(false);
-  }, [featuredItem]);
+    setImageLoaded(false)
+  }, [featuredItem])
 
   if (!featuredItem) {
     return (
@@ -26,24 +29,26 @@ export function HeroSection({ featuredItem, onPlay, onAddToList, onMoreInfo }: H
           <p className="text-gray-400">Loading featured content...</p>
         </div>
       </div>
-    );
+    )
   }
 
-  const title = 'title' in featuredItem ? featuredItem.title : featuredItem.name;
-  const date = 'release_date' in featuredItem ? featuredItem.release_date : featuredItem.first_air_date;
-  const year = date ? new Date(date).getFullYear() : '';
+  const title = 'title' in featuredItem ? featuredItem.title : featuredItem.name
+  const date = 'release_date' in featuredItem ? featuredItem.release_date : featuredItem.first_air_date
+  const year = date ? new Date(date).getFullYear() : ''
 
   return (
     <div className="relative h-[70vh] overflow-hidden">
       {}
       <div className="absolute inset-0">
-        <img
+        <Image
           src={getBackdropUrl(featuredItem.backdrop_path, 'w1280')}
           alt={title}
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
+          fill
+          className={`object-cover transition-opacity duration-1000 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
-          onLoad={() => setImageLoaded(true)}
+          onLoadingComplete={() => setImageLoaded(true)}
+          unoptimized 
         />
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gray-900" />
@@ -122,5 +127,5 @@ export function HeroSection({ featuredItem, onPlay, onAddToList, onMoreInfo }: H
       {}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-movie-darker to-transparent" />
     </div>
-  );
+  )
 }
