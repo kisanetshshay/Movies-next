@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  
+  --font-sans: system-ui, sans-serif;
+
+  
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
+ 
+  --color-movie-primary: 0 100% 50%; 
+  --color-movie-secondary: 280 100% 70%; 
+  --color-movie-dark: 210 40% 8%;
+  --color-movie-darker: 210 40% 4%;
+  --color-movie-light: 210 40% 98%;
+  --color-gray-300: 210 40% 60%;
+  --color-gray-800: 210 40% 13%;
+}
+
+
+@layer components {
+  .bg-movie-darker {
+    background-color: hsl(var(--color-movie-darker));
+  }
+
+  .bg-movie-dark {
+    background-color: hsl(var(--color-movie-dark));
+  }
+
+  .bg-movie-light {
+    background-color: hsl(var(--color-movie-light));
+  }
+
+  .text-movie-primary {
+    color: hsl(var(--color-movie-primary));
+  }
+
+  .movie-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-movie-primary)),
+      hsl(var(--color-movie-secondary))
+    );
+  }
+}
