@@ -67,18 +67,18 @@ export function MovieHeader({
           </nav>
 
           {}
-          <form onSubmit={handleSearch} className="flex-shrink-0">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-32 sm:w-48 md:w-64 bg-movie-light/10 border-gray-700/50 text-white placeholder-gray-400 focus:border-movie-primary"
-              />
-            </div>
-          </form>
+          <form onSubmit={handleSearch} className="flex-shrink-0 relative">
+  <div className="relative pointer-events-auto">
+    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+    <Input
+      type="text"
+      placeholder="Search..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="pl-10 pr-4 py-2 w-32 sm:w-48 md:w-64 bg-movie-light/10 border-gray-700/50 text-white placeholder-gray-400 focus:border-movie-primary focus:ring-1 focus:ring-movie-primary"
+    />
+  </div>
+</form>
 
           {}
           <div className="flex flex-row items-center space-x-2">

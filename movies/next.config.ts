@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['image.tmdb.org'],
+  },
+}
 
-const nextConfig: NextConfig = {
- 
-};
-
-export default nextConfig;
+export default nextConfig

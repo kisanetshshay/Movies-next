@@ -53,7 +53,7 @@ export function MovieCard({ item, onFavoriteToggle, isFavorite = false, onPlay }
           </div>
         )}
 
-        {/* Loading skeleton */}
+        {}
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 bg-gray-800 animate-pulse" />
         )}
